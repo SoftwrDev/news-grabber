@@ -17,8 +17,12 @@ def main():
     for article in soup.select("article"):
         title = article.select("h3 a")
         
-        title = article.select("h4 a")[0].text if not title else title[0].get("href")
-        url = article.select("h4 a")[0].get("href") if not title else title[0].text
+        if not title:
+            title = article.select("h4 a")[0].text
+            url = article.select("h4 a")[0].get("href")
+        elif type(title) == bs4.element.ResultSet:
+            url = title[0].get("href")
+            title = title[0].text
         
         news_list.append({
             "title": title, 
